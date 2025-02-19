@@ -9,6 +9,9 @@
 # Visual Studio 2015 cache/options directory
 .vs/
 
+# JetBrains IDE config files
+.idea/
+
 # DNX
 project.lock.json
 artifacts/

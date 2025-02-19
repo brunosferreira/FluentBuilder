@@ -1,9 +1,7 @@
 using Nosbor.FluentBuilder.Internals.DefaultValueGenerators;
 using System;
 using System.Reflection;
-#if (NET451 || NETCOREAPP3_0)
-    using System.Runtime.Serialization;
-#endif
+using System.Runtime.Serialization;
 
 namespace Nosbor.FluentBuilder.Internals.Support
 {
@@ -37,22 +35,12 @@ namespace Nosbor.FluentBuilder.Internals.Support
 
         internal static Type BaseType(this Type type)
         {
-
-#if NET451
-            return type.BaseType;
-#else
             return type.GetTypeInfo().BaseType;
-#endif
         }
 
         internal static T CreateInstance<T>(this Type type)
         {
-
-#if (NET451 || NETCOREAPP3_0)
             return (T)FormatterServices.GetUninitializedObject(typeof(T));
-#else
-            return (T)GetUninitializedObjectWithFormatterServices(typeof(T));
-#endif
         }
 
         private static object GetUninitializedObjectWithFormatterServices(Type type)
@@ -65,7 +53,7 @@ namespace Nosbor.FluentBuilder.Internals.Support
                 typeof (string)
                     .GetTypeInfo()
                     .Assembly
-                    .GetType("System.Runtime.Serialization.FormatterServices")
+                    .GetType("System.Runtime.CompilerServices.RuntimeHelpers")
                     .GetMethod("GetUninitializedObject", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static)
                     .CreateDelegate(typeof (Func<Type, object>));
     }
